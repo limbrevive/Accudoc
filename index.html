@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AccuDocs — Effortless, accurate and compliant notes for Therapists</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #3B7FF5; --blue-dark: #2563EB; --blue-light: #EEF4FF;
+    --text: #1a1a2e; --text-muted: #6B7280; --border: #E5E7EB;
+    --white: #ffffff; --radius: 16px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--text); text-decoration: none; }
+  .nav-icon { width: 36px; height: 36px; background: var(--blue); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 15px; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .btn-primary { background: var(--blue); color: white; border: none; border-radius: 50px; padding: 10px 22px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+  .btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero-wrap { max-width: 1300px; margin: 0 auto; }
+  .hero { min-height: calc(100vh - 64px); padding: 80px 80px 60px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 60px; }
+  .hero h1 { font-size: 58px; font-weight: 900; line-height: 1.05; letter-spacing: -1.5px; margin-bottom: 16px; }
+  .hero-subtitle { font-size: 26px; font-weight: 700; color: var(--blue); line-height: 1.3; margin-bottom: 20px; }
+  .hero-desc { font-size: 15px; color: var(--text-muted); line-height: 1.7; max-width: 480px; margin-bottom: 36px; }
+  .hero-ctas { display: flex; gap: 14px; margin-bottom: 52px; flex-wrap: wrap; }
+  .btn-primary-large { background: var(--blue); color: white; border: none; border-radius: 50px; padding: 14px 28px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s, transform 0.15s; }
+  .btn-primary-large:hover { background: var(--blue-dark); transform: translateY(-2px); }
+  .btn-outline-large { background: transparent; color: var(--text); border: 1.5px solid #D1D5DB; border-radius: 50px; padding: 14px 28px; font-size: 15px; font-weight: 600; cursor: pointer; transition: border-color 0.2s, transform 0.15s; }
+  .btn-outline-large:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
+  .hero-stats { display: flex; gap: 48px; flex-wrap: wrap; }
+  .stat-num { font-size: 30px; font-weight: 800; }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .hero-right { display: flex; justify-content: center; align-items: center; position: relative; }
+  .hero-img-wrap { width: 100%; max-width: 400px; position: relative; }
+  .hero-img-wrap img { width: 100%; display: block; border-radius: 20px; }
+  .session-badge { position: absolute; bottom: 24px; right: 0; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); padding: 10px 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+  .session-dot { width: 9px; height: 9px; background: #22C55E; border-radius: 50%; flex-shrink: 0; }
+  .session-badge-tag { background: var(--blue-light); color: var(--blue); border-radius: 6px; padding: 3px 8px; font-size: 12px; font-weight: 600; }
+
+  /* SECTIONS */
+  section { padding: 80px 40px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-label { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); text-align: center; margin-bottom: 14px; }
+  .section-title { font-size: 40px; font-weight: 800; text-align: center; letter-spacing: -1px; margin-bottom: 16px; }
+  .section-desc { font-size: 15px; color: var(--text-muted); text-align: center; max-width: 560px; margin: 0 auto 52px; line-height: 1.7; }
+
+  /* HOW IT WORKS */
+  .how-section { background: #F8F9FB; }
+  .steps-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 64px; }
+  .step-card { background: white; border-radius: var(--radius); padding: 32px; border: 1px solid var(--border); position: relative; }
+  .step-arrow { position: absolute; right: -18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 20px; z-index: 2; }
+  .step-icon { width: 44px; height: 44px; margin-bottom: 20px; }
+  .step-num { font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+  .step-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+  .workflow-split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .workflow-label { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+  .workflow-title { font-size: 34px; font-weight: 800; line-height: 1.2; letter-spacing: -0.8px; margin-bottom: 20px; }
+  .workflow-title span { color: var(--blue); }
+  .workflow-desc { font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 24px; }
+  .workflow-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .workflow-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; }
+  .workflow-dot { width: 8px; height: 8px; background: var(--blue); border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .workflow-img { border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
+  .workflow-img img { width: 100%; display: block; }
+
+  /* FEATURES */
+  .feature-block { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-bottom: 80px; }
+  .feature-tag { display: inline-flex; align-items: center; gap: 8px; background: var(--blue-light); color: var(--blue); border-radius: 50px; padding: 5px 14px; font-size: 13px; font-weight: 600; margin-bottom: 20px; }
+  .feature-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 14px; }
+  .feature-desc { font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 22px; }
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .feature-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-muted); }
+  .feature-img { border-radius: 20px; overflow: hidden; }
+  .feature-img img { width: 100%; display: block; border-radius: 20px; }
+  .two-col-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  .feature-card { background: #F8F9FB; border: 1px solid var(--border); border-radius: 20px; padding: 36px; }
+  .feature-card-tag { display: inline-flex; align-items: center; gap: 8px; background: var(--blue-light); color: var(--blue); border-radius: 50px; padding: 5px 14px; font-size: 12px; font-weight: 600; margin-bottom: 20px; }
+  .feature-card-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
+  .feature-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 20px; }
+  .soapier-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .soapier-item { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+  .soapier-badge { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; color: white; flex-shrink: 0; }
+  .mini-cards-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .mini-card { background: #F8F9FB; border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; }
+  .mini-icon { margin-bottom: 16px; color: var(--blue); }
+  .mini-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .mini-desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+
+  /* BENEFITS */
+  .benefits-section { background: #F8F9FB; }
+  .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .benefit-card { background: white; border: 1px solid var(--border); border-radius: 18px; padding: 32px; transition: box-shadow 0.2s, transform 0.2s; }
+  .benefit-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); transform: translateY(-3px); }
+  .benefit-icon { width: 44px; height: 44px; background: var(--blue-light); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--blue); }
+  .benefit-title { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+  .benefit-desc { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+
+  /* CTA */
+  .cta-section { background: var(--blue); padding: 80px 40px; text-align: center; }
+  .cta-section h2 { font-size: 44px; font-weight: 800; color: white; letter-spacing: -1px; max-width: 600px; margin: 0 auto 16px; }
+  .cta-section p { font-size: 15px; color: rgba(255,255,255,0.8); max-width: 520px; margin: 0 auto 36px; line-height: 1.7; }
+  .cta-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn-white { background: white; color: var(--blue); border: none; border-radius: 50px; padding: 14px 28px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: transform 0.15s, box-shadow 0.15s; }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+  .btn-white-outline { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.6); border-radius: 50px; padding: 14px 28px; font-size: 15px; font-weight: 600; cursor: pointer; transition: border-color 0.2s, transform 0.15s; }
+  .btn-white-outline:hover { border-color: white; transform: translateY(-2px); }
+  .cta-note { margin-top: 16px; font-size: 12px; color: rgba(255,255,255,0.6); }
+
+  /* FOOTER */
+  footer { background: white; border-top: 1px solid var(--border); padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a { text-decoration: none; color: var(--text-muted); font-size: 13px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text); }
+  .footer-copy { font-size: 13px; color: var(--text-muted); }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+  .modal { background: white; border-radius: 24px; padding: 48px; width: 100%; max-width: 500px; position: relative; transform: translateY(24px) scale(0.97); transition: transform 0.25s; box-shadow: 0 24px 60px rgba(0,0,0,0.18); max-height: 90vh; overflow-y: auto; }
+  .modal-overlay.active .modal { transform: translateY(0) scale(1); }
+  .modal-close { position: absolute; top: 20px; right: 24px; background: none; border: none; font-size: 22px; color: var(--text-muted); cursor: pointer; line-height: 1; }
+  .modal-close:hover { color: var(--text); }
+  .modal-badge { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; }
+  .modal h2 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .modal-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; line-height: 1.6; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+  .form-field label { font-size: 13px; font-weight: 600; }
+  .form-field input, .form-field select, .form-field textarea { border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: inherit; color: var(--text); outline: none; transition: border-color 0.2s; background: white; width: 100%; }
+  .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--blue); }
+  .form-field textarea { resize: vertical; min-height: 90px; }
+  .form-submit { width: 100%; background: var(--blue); color: white; border: none; border-radius: 50px; padding: 15px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px; transition: background 0.2s, transform 0.15s; font-family: inherit; }
+  .form-submit:hover { background: var(--blue-dark); transform: translateY(-1px); }
+  .form-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+  .form-note { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 14px; }
+  .success-state { text-align: center; padding: 24px 0; display: none; }
+  .success-icon { width: 64px; height: 64px; background: #DCFCE7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+  .success-state h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .success-state p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 40px 24px; }
+    .hero h1 { font-size: 38px; }
+    .hero-right { display: none; }
+    .steps-row, .workflow-split, .feature-block, .two-col-cards, .mini-cards-row, .benefits-grid { grid-template-columns: 1fr; }
+    section { padding: 52px 20px; }
+    nav { padding: 0 20px; }
+    .modal { margin: 16px; padding: 32px 20px; }
+    .form-row { grid-template-columns: 1fr; }
+    .step-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">
+    <div class="nav-icon">A</div>
+    AccuDocs
+  </a>
+  <div class="nav-links">
+    <a href="#how-it-works">How It Works</a>
+    <a href="#features">Features</a>
+    <a href="#benefits">Benefits</a>
+    <button class="btn-primary" onclick="openModal('demo')">Request Demo</button>
+  </div>
+</nav>
+
+
+<!-- HERO -->
+<div id="home">
+  <div class="hero-wrap">
+    <div class="hero">
+      <div class="hero-left">
+        <h1>AccuDocs</h1>
+        <div class="hero-subtitle">Effortless, accurate and compliant notes for Therapists</div>
+        <p class="hero-desc">AccuDocs uses a CV-enabled webcam and microphone to automatically detect exercises, count reps, track assistance levels, and generate complete SOAPIER documentation in real time.</p>
+        <div class="hero-ctas">
+          <button class="btn-primary-large" onclick="openModal('access')">Request Early Access &#x2192;</button>
+          <button class="btn-outline-large" onclick="openModal('learn')">Learn More</button>
+        </div>
+        <div class="hero-stats">
+          <div><div class="stat-num">&gt;45 Mins</div><div class="stat-label">Saved per therapist per day</div></div>
+          <div><div class="stat-num">SOAPIER</div><div class="stat-label">Auto-generated notes</div></div>
+          <div><div class="stat-num">Real-time</div><div class="stat-label">CV &amp; audio capture</div></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-img-wrap">
+          <img src="therapist.png" alt="Therapist illustration" style="width:100%;display:block;border-radius:20px;" />
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how-it-works">
+  <div class="section-inner">
+    <div class="section-label">Our Solution</div>
+    <h2 class="section-title">Your Documentation Sidekick</h2>
+    <p class="section-desc">Have cameras and mic ready. Click "Start Session". Go about your therapy session.</p>
+
+    <div class="steps-row">
+      <div class="step-card">
+        <svg class="step-icon" viewBox="0 0 44 44" fill="none">
+          <rect width="44" height="44" rx="10" fill="#F3F4F6"/>
+          <circle cx="22" cy="22" r="10" stroke="#6B7280" stroke-width="2" fill="none"/>
+          <circle cx="22" cy="22" r="5" fill="#3B7FF5"/>
+          <circle cx="22" cy="22" r="2" fill="white"/>
+        </svg>
+        <div class="step-num">1. <strong>Observes</strong></div>
+        <p class="step-desc">Computer Vision tracks joints in real-time, detecting exercise type, movement quality, and range of motion.</p>
+        <span class="step-arrow">&#x2192;</span>
+      </div>
+      <div class="step-card">
+        <svg class="step-icon" viewBox="0 0 44 44" fill="none">
+          <rect width="44" height="44" rx="10" fill="#F3F4F6"/>
+          <polygon points="10,34 22,10 34,34" stroke="#6B7280" stroke-width="2" fill="none"/>
+          <line x1="14" y1="28" x2="30" y2="28" stroke="#6B7280" stroke-width="2"/>
+        </svg>
+        <div class="step-num">2. <strong>Measures</strong></div>
+        <p class="step-desc">Calculates angles, rep counts, asymmetry scores and assistance levels automatically as the session unfolds.</p>
+        <span class="step-arrow">&#x2192;</span>
+      </div>
+      <div class="step-card">
+        <svg class="step-icon" viewBox="0 0 44 44" fill="none">
+          <rect width="44" height="44" rx="10" fill="#F3F4F6"/>
+          <rect x="10" y="8" width="24" height="28" rx="4" stroke="#6B7280" stroke-width="2" fill="none"/>
+          <line x1="14" y1="17" x2="30" y2="17" stroke="#6B7280" stroke-width="1.5"/>
+          <line x1="14" y1="22" x2="30" y2="22" stroke="#6B7280" stroke-width="1.5"/>
+          <line x1="14" y1="27" x2="24" y2="27" stroke="#6B7280" stroke-width="1.5"/>
+        </svg>
+        <div class="step-num">3. <strong>Drafts</strong></div>
+        <p class="step-desc">Generates complete clinical SOAPIER text ready to copy-paste into your EMR, no typing needed.</p>
+      </div>
+    </div>
+
+    <div class="workflow-split">
+      <div>
+        <div class="workflow-label">The Workflow</div>
+        <div class="workflow-title">Treat your patient.<br><span>We capture everything.</span></div>
+        <p class="workflow-desc">A webcam captures the session visually while a hands-free microphone records verbal interactions. AccuDocs processes both streams simultaneously, populating EMR fields as you work so notes are ready before your next patient arrives.</p>
+        <ul class="workflow-list">
+          <li><span class="workflow-dot"></span><span><strong>Webcam:</strong> Tracks posture, joints, movement quality</span></li>
+          <li><span class="workflow-dot"></span><span><strong>Microphone:</strong> Captures therapist cues &amp; patient responses</span></li>
+          <li><span class="workflow-dot"></span><span><strong>SOAP Note:</strong> Auto-generated and structured for your EMR</span></li>
+        </ul>
+      </div>
+      <div class="workflow-img">
+        <img src="workflow.png" alt="Workflow illustration" style="width:100%;display:block;" />
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- FEATURES -->
+<section style="background:white;" id="features">
+  <div class="section-inner">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">AI and CV-Enabled Documentation</h2>
+    <p class="section-desc">Physiotherapy is non-verbal. AccuDocs captures what other tools miss.</p>
+
+    <div class="feature-block">
+      <div>
+        <div class="feature-tag">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 2 8 2 8s2.5 5 6 5 6-5 6-5-2.5-5-6-5zm0 8a3 3 0 110-6 3 3 0 010 6zm0-4.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>
+          Computer Vision
+        </div>
+        <div class="feature-title">Sees the clinical picture</div>
+        <p class="feature-desc">The computer vision model tracks joints in real-time, analysing subtle movement patterns, calculating angles, rep counts and asymmetry — objective data that verbal tools simply cannot capture.</p>
+        <ul class="feature-list">
+          <li><span class="workflow-dot"></span> Exercise type identification</li>
+          <li><span class="workflow-dot"></span> Repetition &amp; set counting</li>
+          <li><span class="workflow-dot"></span> Assistance level detection (min/mod/max)</li>
+          <li><span class="workflow-dot"></span> Joint angle &amp; ROM measurement</li>
+          <li><span class="workflow-dot"></span> Asymmetry &amp; gait pattern analysis</li>
+        </ul>
+      </div>
+      <div class="feature-img">
+        <img src="skeleton.png" alt="Computer vision skeleton tracking" style="width:100%;border-radius:20px;" />
+      </div>
+    </div>
+
+    <div class="two-col-cards">
+      <div class="feature-card">
+        <div class="feature-card-tag">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a3 3 0 013 3v4a3 3 0 01-6 0V4a3 3 0 013-3zm5 7a5 5 0 01-10 0H1a7 7 0 0014 0h-2z"/></svg>
+          Voice Intelligence
+        </div>
+        <div class="feature-card-title">Hears the clinical story</div>
+        <p class="feature-card-desc">The hands-free microphone captures your conversation — therapist cues, patient responses, pain levels — and maps them to the right SOAPIER sections automatically.</p>
+        <ul class="feature-list">
+          <li><span class="workflow-dot"></span> Medical terminology recognition</li>
+          <li><span class="workflow-dot"></span> Patient response capture</li>
+          <li><span class="workflow-dot"></span> Pain scale documentation</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-tag">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H4zm1 3h6v1H5V5zm0 2h6v1H5V7zm0 2h4v1H5V9z"/></svg>
+          SOAPIER Output
+        </div>
+        <div class="feature-card-title">Structured, compliant notes</div>
+        <p class="feature-card-desc">Every session produces a complete SOAPIER note, ready to review, edit, and sign off.</p>
+        <ul class="soapier-list">
+          <li class="soapier-item"><span class="soapier-badge" style="background:#3B7FF5;">S</span> Subjective</li>
+          <li class="soapier-item"><span class="soapier-badge" style="background:#6366F1;">O</span> Objective</li>
+          <li class="soapier-item"><span class="soapier-badge" style="background:#8B5CF6;">A</span> Assessment</li>
+          <li class="soapier-item"><span class="soapier-badge" style="background:#EC4899;">P</span> Plan</li>
+          <li class="soapier-item"><span class="soapier-badge" style="background:#3B7FF5;">I</span> Intervention</li>
+          <li class="soapier-item"><span class="soapier-badge" style="background:#6366F1;">E</span> Evaluation</li>
+          <li class="soapier-item"><span class="soapier-badge" style="background:#8B5CF6;">R</span> Revision</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mini-cards-row" style="margin-top:24px;">
+      <div class="mini-card">
+        <div class="mini-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="mini-title">Rep &amp; Set Counting</div>
+        <p class="mini-desc">Automatic repetition tracking with set detection</p>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="mini-title">Real-Time Processing</div>
+        <p class="mini-desc">Notes generated as the session unfolds</p>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="mini-title">Privacy-First Design</div>
+        <p class="mini-desc">Built to navigate patient consent &amp; hospital governance</p>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <div class="mini-title">EMR Compatible</div>
+        <p class="mini-desc">Auto-populates mobility metrics directly into patient charts</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- BENEFITS -->
+<section class="benefits-section" id="benefits">
+  <div class="section-inner">
+    <div class="section-label">Why AccuDocs</div>
+    <h2 class="section-title">Key Benefits</h2>
+    <p class="section-desc">Physiotherapists are hired to treat patients — so why do they spend so much time typing documentation?</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="benefit-title">Save 45+ Minutes Per Day</div>
+        <p class="benefit-desc">Eliminate end-of-day documentation marathons. Notes are ready before your next patient arrives.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+        <div class="benefit-title">Optimised Workflow</div>
+        <p class="benefit-desc">Streamlines documentation, increasing daily patient capacity — or simply giving you more time to rest.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="benefit-title">Enhanced Data Integrity</div>
+        <p class="benefit-desc">Captures precise, objective clinical data in real-time, significantly reducing recall bias.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+        <div class="benefit-title">Track Progress Objectively</div>
+        <p class="benefit-desc">Compare ROM, rep counts, and assistance levels across sessions with hard, reproducible data.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="benefit-title">Risk Mitigation</div>
+        <p class="benefit-desc">Provides an objective record of interactions, safeguarding therapists against disputes and improving legal defensibility.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/></svg></div>
+        <div class="benefit-title">Reduce Therapist Burnout</div>
+        <p class="benefit-desc">Documentation burden is the #1 cause of clinician fatigue. AccuDocs takes it off your plate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready to transform how you document?</h2>
+  <p>We're seeking partnerships with clinics to gain insight into clinical dynamics, typical documentation practices, and to improve our model together.</p>
+  <div class="cta-buttons">
+    <button class="btn-white" onclick="openModal('access')">Request Early Access &#x2192;</button>
+    <button class="btn-white-outline" onclick="openModal('talk')">Talk to Our Team</button>
+  </div>
+  <div class="cta-note">No commitment required &middot; Free pilot program for qualified clinics</div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <div class="nav-icon">A</div>
+    AccuDocs
+  </div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">HIPAA</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 AccuDocs. All rights reserved.</div>
+</footer>
+
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+
+    <div id="formView">
+      <div class="modal-badge" id="modalBadge">Get Early Access</div>
+      <h2 id="modalTitle">Request Early Access</h2>
+      <p class="modal-sub" id="modalSub">Tell us about your clinic and we'll be in touch within 24 hours.</p>
+
+      <form id="contactForm"
+            action="https://formspree.io/f/limbrevive@gmail.com"
+            method="POST"
+            onsubmit="handleSubmit(event)">
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Jane" required />
+          </div>
+          <div class="form-field">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Smith" required />
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="email">Work Email</label>
+          <input type="email" id="email" name="email" placeholder="jane@yourclinic.com" required />
+        </div>
+        <div class="form-field">
+          <label for="clinic">Clinic / Organisation</label>
+          <input type="text" id="clinic" name="clinic" placeholder="Sunrise Physiotherapy" required />
+        </div>
+        <div class="form-field">
+          <label for="role">Your Role</label>
+          <select id="role" name="role" required>
+            <option value="" disabled selected>Select your role</option>
+            <option>Physiotherapist</option>
+            <option>Clinic Owner / Manager</option>
+            <option>Practice Administrator</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="message">Anything you'd like us to know? (optional)</label>
+          <textarea id="message" name="message" placeholder="How many therapists are in your clinic? Any specific goals?"></textarea>
+        </div>
+        <input type="hidden" name="_source" id="formSource" value="hero" />
+        <input type="hidden" name="_replyto" value="limbrevive@gmail.com" />
+
+        <button type="submit" class="form-submit" id="submitBtn">Send Request &#x2192;</button>
+        <p class="form-note">No commitment required. We reply within 24 hours.</p>
+      </form>
+    </div>
+
+    <div class="success-state" id="successView">
+      <div class="success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Request sent!</h3>
+      <p>Thanks for reaching out. Our team will be in touch within 24 hours.</p>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const variants = {
+    demo:   { badge: 'Request a Demo',   title: 'Book a Demo',          sub: "See AccuDocs in action. We'll walk you through the full workflow in 20 minutes." },
+    access: { badge: 'Get Early Access', title: 'Request Early Access', sub: "Tell us about your clinic and we'll be in touch within 24 hours." },
+    learn:  { badge: 'Learn More',       title: 'Get in Touch',         sub: 'Have questions about how AccuDocs works? We would love to chat.' },
+    talk:   { badge: 'Talk to Our Team', title: 'Talk to Our Team',     sub: 'Ready to explore a partnership? Drop us a message and we will set up a call.' }
+  };
+
+  function openModal(type) {
+    const v = variants[type] || variants.access;
+    document.getElementById('modalBadge').textContent    = v.badge;
+    document.getElementById('modalTitle').textContent    = v.title;
+    document.getElementById('modalSub').textContent      = v.sub;
+    document.getElementById('formSource').value          = type;
+    document.getElementById('formView').style.display    = '';
+    document.getElementById('successView').style.display = 'none';
+    document.getElementById('submitBtn').textContent     = 'Send Request \u2192';
+    document.getElementById('submitBtn').disabled        = false;
+    document.getElementById('modalOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn  = document.getElementById('submitBtn');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        document.getElementById('formView').style.display    = 'none';
+        document.getElementById('successView').style.display = 'block';
+        form.reset();
+      } else {
+        btn.textContent = 'Something went wrong, try again';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = 'Something went wrong, try again';
+      btn.disabled = false;
+    }
+  }
+</script>
+
+</body>
+</html>
